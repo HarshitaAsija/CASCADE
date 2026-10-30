@@ -1,0 +1,48 @@
+{
+  "provenance": "simulated",
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.24,
+            28.65
+          ],
+          [
+            77.25,
+            28.66
+          ]
+        ]
+      },
+      "properties": {
+        "provenance": "simulated",
+        "id": "road-yamuna-01",
+        "status": "failed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            77.25,
+            28.66
+          ],
+          [
+            77.26,
+            28.64
+          ]
+        ]
+      },
+      "properties": {
+        "provenance": "simulated",
+        "id": "road-ito-02",
+        "status": "failed"
+      }
+    }
+  ]
+}

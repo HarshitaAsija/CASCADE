@@ -9,6 +9,7 @@ This directory holds cached inputs for one New Delhi study area:
 - `sample_simulation.json`: schema-valid simulated response for frontend development.
 - `sample_comparison.json`: schema-valid baseline and individual intervention results.
 - `sample_agents.json`: schema-valid illustrative agent explanation and intervention proposals.
+- `sample_graph.geojson`: simulated road snapshot matching the graph API stub, also bundled with the frontend.
 
 The three sample responses and `facilities.json` are supplied at this stage. All values are simulated, including coordinates, capacities, backup durations, node IDs, travel times, population counts and intervention benefits. LNJP Hospital and GTB Hospital names provide Delhi context; the records are not verified representations of those hospitals. The flood polygon and timeline are illustrative. No graph engine or AI generated these results.
 

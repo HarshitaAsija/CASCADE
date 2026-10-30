@@ -1,0 +1,74 @@
+[
+  {
+    "id": "lnjp-hospital",
+    "name": "LNJP Hospital",
+    "type": "hospital",
+    "lat": 28.639,
+    "lon": 77.24,
+    "capacity": 200,
+    "has_backup": true,
+    "backup_hours": 2.0,
+    "node_id": 1001,
+    "provenance": "simulated"
+  },
+  {
+    "id": "gtb-hospital",
+    "name": "GTB Hospital",
+    "type": "hospital",
+    "lat": 28.684,
+    "lon": 77.309,
+    "capacity": 250,
+    "has_backup": true,
+    "backup_hours": 6.0,
+    "node_id": 1002,
+    "provenance": "simulated"
+  },
+  {
+    "id": "substation-demo",
+    "name": "Yamuna demo substation",
+    "type": "substation",
+    "lat": 28.65,
+    "lon": 77.245,
+    "capacity": null,
+    "has_backup": false,
+    "backup_hours": null,
+    "node_id": 1003,
+    "provenance": "simulated"
+  },
+  {
+    "id": "shelter-yamuna-demo",
+    "name": "Yamuna demo shelter",
+    "type": "shelter",
+    "lat": 28.66,
+    "lon": 77.25,
+    "capacity": 300,
+    "has_backup": false,
+    "backup_hours": null,
+    "node_id": 1004,
+    "provenance": "simulated"
+  },
+  {
+    "id": "shelter-east-demo",
+    "name": "East bank demo shelter",
+    "type": "shelter",
+    "lat": 28.65,
+    "lon": 77.29,
+    "capacity": 500,
+    "has_backup": false,
+    "backup_hours": null,
+    "node_id": 1005,
+    "provenance": "simulated"
+  },
+  {
+    "id": "fire-demo",
+    "name": "Delhi demo fire station",
+    "type": "fire_station",
+    "lat": 28.67,
+    "lon": 77.23,
+    "capacity": null,
+    "has_backup": false,
+    "backup_hours": null,
+    "node_id": 1006,
+    "provenance": "simulated"
+  }
+]

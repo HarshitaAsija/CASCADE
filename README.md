@@ -31,7 +31,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. The placeholder uses MapLibre demo tiles, which require internet access. Map coordinates use longitude then latitude: `[77.23, 28.63]`.
+Open http://localhost:5173. The map uses key-free OpenStreetMap raster tiles, which require internet access. Scenario overlays fall back to bundled samples when the API is unavailable. Set `VITE_API_BASE` in `frontend/.env` to override the default `http://localhost:8000`. See `frontend/README.md` for details. Map coordinates use longitude then latitude: `[77.23, 28.63]`.
 
 ```powershell
 npm run build
