@@ -1,0 +1,311 @@
+{
+  "baseline": {
+    "provenance": "simulated",
+    "flood_polygon_geojson": {
+      "type": "Polygon",
+      "provenance": "simulated",
+      "coordinates": [
+        [
+          [
+            77.235,
+            28.62
+          ],
+          [
+            77.27,
+            28.62
+          ],
+          [
+            77.27,
+            28.69
+          ],
+          [
+            77.235,
+            28.69
+          ],
+          [
+            77.235,
+            28.62
+          ]
+        ]
+      ]
+    },
+    "failed_edge_ids": [
+      "road-yamuna-01",
+      "road-ito-02"
+    ],
+    "failed_facility_ids": [
+      "substation-demo",
+      "lnjp-hospital"
+    ],
+    "isolated_facility_ids": [
+      "shelter-yamuna-demo"
+    ],
+    "metrics": {
+      "median_response_min": 24.0,
+      "p90_response_min": 41.0,
+      "pop_without_hospital_access": 12500,
+      "facilities_degraded": 3,
+      "evacuation_capacity_pct": 58.0,
+      "provenance": "simulated"
+    },
+    "timeline": [
+      {
+        "t_hours": 0.0,
+        "newly_failed_ids": [
+          "road-yamuna-01",
+          "road-ito-02",
+          "substation-demo"
+        ],
+        "description": "Illustrative flood closes two roads and a synthetic substation.",
+        "provenance": "simulated"
+      },
+      {
+        "t_hours": 2.0,
+        "newly_failed_ids": [
+          "lnjp-hospital"
+        ],
+        "description": "Placeholder power dependency disables the LNJP service node after an assumed two-hour backup window. This is not an observed hospital failure.",
+        "provenance": "simulated"
+      }
+    ]
+  },
+  "interventions": [
+    {
+      "id": "generator-lnjp",
+      "type": "deploy_generator",
+      "params": {
+        "facility_id": "lnjp-hospital",
+        "backup_hours": 6.0,
+        "provenance": "simulated"
+      },
+      "rationale": "Illustrate temporary backup power at the LNJP service node.",
+      "provenance": "simulated"
+    },
+    {
+      "id": "ambulance-gtb",
+      "type": "preposition_ambulance",
+      "params": {
+        "facility_id": "gtb-hospital",
+        "ambulance_count": 2,
+        "provenance": "simulated"
+      },
+      "rationale": "Illustrate pre-positioning vehicles near the GTB service node.",
+      "provenance": "simulated"
+    },
+    {
+      "id": "shelter-east",
+      "type": "open_shelter",
+      "params": {
+        "facility_id": "shelter-east-demo",
+        "capacity": 500,
+        "provenance": "simulated"
+      },
+      "rationale": "Illustrate additional synthetic shelter capacity on the east bank.",
+      "provenance": "simulated"
+    }
+  ],
+  "results": {
+    "generator-lnjp": {
+      "provenance": "simulated",
+      "flood_polygon_geojson": {
+        "type": "Polygon",
+        "provenance": "simulated",
+        "coordinates": [
+          [
+            [
+              77.235,
+              28.62
+            ],
+            [
+              77.27,
+              28.62
+            ],
+            [
+              77.27,
+              28.69
+            ],
+            [
+              77.235,
+              28.69
+            ],
+            [
+              77.235,
+              28.62
+            ]
+          ]
+        ]
+      },
+      "failed_edge_ids": [
+        "road-yamuna-01",
+        "road-ito-02"
+      ],
+      "failed_facility_ids": [
+        "substation-demo"
+      ],
+      "isolated_facility_ids": [
+        "shelter-yamuna-demo"
+      ],
+      "metrics": {
+        "median_response_min": 18.0,
+        "p90_response_min": 32.0,
+        "pop_without_hospital_access": 8000,
+        "facilities_degraded": 2,
+        "evacuation_capacity_pct": 58.0,
+        "provenance": "simulated"
+      },
+      "timeline": [
+        {
+          "t_hours": 0.0,
+          "newly_failed_ids": [
+            "road-yamuna-01",
+            "road-ito-02",
+            "substation-demo"
+          ],
+          "description": "Illustrative flood closes two roads and a synthetic substation.",
+          "provenance": "simulated"
+        }
+      ]
+    },
+    "ambulance-gtb": {
+      "provenance": "simulated",
+      "flood_polygon_geojson": {
+        "type": "Polygon",
+        "provenance": "simulated",
+        "coordinates": [
+          [
+            [
+              77.235,
+              28.62
+            ],
+            [
+              77.27,
+              28.62
+            ],
+            [
+              77.27,
+              28.69
+            ],
+            [
+              77.235,
+              28.69
+            ],
+            [
+              77.235,
+              28.62
+            ]
+          ]
+        ]
+      },
+      "failed_edge_ids": [
+        "road-yamuna-01",
+        "road-ito-02"
+      ],
+      "failed_facility_ids": [
+        "substation-demo",
+        "lnjp-hospital"
+      ],
+      "isolated_facility_ids": [
+        "shelter-yamuna-demo"
+      ],
+      "metrics": {
+        "median_response_min": 21.0,
+        "p90_response_min": 35.0,
+        "pop_without_hospital_access": 12500,
+        "facilities_degraded": 3,
+        "evacuation_capacity_pct": 58.0,
+        "provenance": "simulated"
+      },
+      "timeline": [
+        {
+          "t_hours": 0.0,
+          "newly_failed_ids": [
+            "road-yamuna-01",
+            "road-ito-02",
+            "substation-demo"
+          ],
+          "description": "Illustrative flood closes two roads and a synthetic substation.",
+          "provenance": "simulated"
+        },
+        {
+          "t_hours": 2.0,
+          "newly_failed_ids": [
+            "lnjp-hospital"
+          ],
+          "description": "Placeholder power dependency disables the LNJP service node after an assumed two-hour backup window. This is not an observed hospital failure.",
+          "provenance": "simulated"
+        }
+      ]
+    },
+    "shelter-east": {
+      "provenance": "simulated",
+      "flood_polygon_geojson": {
+        "type": "Polygon",
+        "provenance": "simulated",
+        "coordinates": [
+          [
+            [
+              77.235,
+              28.62
+            ],
+            [
+              77.27,
+              28.62
+            ],
+            [
+              77.27,
+              28.69
+            ],
+            [
+              77.235,
+              28.69
+            ],
+            [
+              77.235,
+              28.62
+            ]
+          ]
+        ]
+      },
+      "failed_edge_ids": [
+        "road-yamuna-01",
+        "road-ito-02"
+      ],
+      "failed_facility_ids": [
+        "substation-demo",
+        "lnjp-hospital"
+      ],
+      "isolated_facility_ids": [
+        "shelter-yamuna-demo"
+      ],
+      "metrics": {
+        "median_response_min": 24.0,
+        "p90_response_min": 41.0,
+        "pop_without_hospital_access": 12500,
+        "facilities_degraded": 3,
+        "evacuation_capacity_pct": 72.0,
+        "provenance": "simulated"
+      },
+      "timeline": [
+        {
+          "t_hours": 0.0,
+          "newly_failed_ids": [
+            "road-yamuna-01",
+            "road-ito-02",
+            "substation-demo"
+          ],
+          "description": "Illustrative flood closes two roads and a synthetic substation.",
+          "provenance": "simulated"
+        },
+        {
+          "t_hours": 2.0,
+          "newly_failed_ids": [
+            "lnjp-hospital"
+          ],
+          "description": "Placeholder power dependency disables the LNJP service node after an assumed two-hour backup window. This is not an observed hospital failure.",
+          "provenance": "simulated"
+        }
+      ]
+    }
+  },
+  "provenance": "simulated"
+}

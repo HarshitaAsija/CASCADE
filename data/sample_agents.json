@@ -1,0 +1,54 @@
+{
+  "explanation": "SIMULATED PLACEHOLDER: the sample imagines road closures near the Yamuna and an assumed power dependency at an LNJP Hospital service node. GTB Hospital remains a destination in the story. These are hard-coded UI examples, not observed failures or computed forecasts.",
+  "bottlenecks": [
+    "Two synthetic road closures constrain cross-area access.",
+    "The LNJP service node has a fictional backup-power limit."
+  ],
+  "interventions": [
+    {
+      "id": "generator-lnjp",
+      "type": "deploy_generator",
+      "params": {
+        "facility_id": "lnjp-hospital",
+        "backup_hours": 6.0,
+        "provenance": "simulated"
+      },
+      "rationale": "Illustrate temporary backup power at the LNJP service node.",
+      "provenance": "simulated"
+    },
+    {
+      "id": "ambulance-gtb",
+      "type": "preposition_ambulance",
+      "params": {
+        "facility_id": "gtb-hospital",
+        "ambulance_count": 2,
+        "provenance": "simulated"
+      },
+      "rationale": "Illustrate pre-positioning vehicles near the GTB service node.",
+      "provenance": "simulated"
+    },
+    {
+      "id": "shelter-east",
+      "type": "open_shelter",
+      "params": {
+        "facility_id": "shelter-east-demo",
+        "capacity": 500,
+        "provenance": "simulated"
+      },
+      "rationale": "Illustrate additional synthetic shelter capacity on the east bank.",
+      "provenance": "simulated"
+    }
+  ],
+  "assumptions": [
+    "All coordinates, capacities, node IDs, backup durations and metrics are simulated placeholders, even when real hospital names are used.",
+    "Timeline hours are illustrative; no temporal model has run.",
+    "Intervention comparisons are hand-authored UI fixtures, not calculated benefits.",
+    "Each comparison evaluates one intervention against the same baseline; benefits are not additive."
+  ],
+  "confidence_notes": [
+    "No verified Delhi facility data has been loaded.",
+    "Response-time and evacuation metrics have not been validated.",
+    "No LLM was called and no operational recommendation is being made."
+  ],
+  "provenance": "simulated"
+}
