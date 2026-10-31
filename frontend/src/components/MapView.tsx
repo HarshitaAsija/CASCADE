@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import maplibregl from 'maplibre-gl';
 import type { GeoJSONSource, StyleSpecification } from 'maplibre-gl';
-import type { Facility } from '../types';
-import { useSimulation } from '../hooks/useSimulation';
+import type { Facility, GraphGeoJSON, SimulationResult } from '../types';
 import type { FacilityState } from '../hooks/useSimulation';
 import { ProvenanceBadge } from './ProvenanceBadge';
 
@@ -43,8 +42,15 @@ function FacilityDetails({ facility, state }: { facility: Facility; state: Facil
   </section>;
 }
 
-export function MapView({ facilityStates }: { facilityStates?: Record<string, FacilityState> }) {
-  const { graph, facilities, simulation, states, sources, loading } = useSimulation();
+export function MapView({ graph, facilities, simulation, facilityStates }: {
+  graph: GraphGeoJSON; facilities: Facility[]; simulation: SimulationResult;
+  facilityStates?: Record<string, FacilityState>;
+}) {
+  const states: Record<string, FacilityState> = {};
+  for (const facility of facilities) {
+    states[facility.id] = simulation.failed_facility_ids.includes(facility.id) ? 'failed'
+      : simulation.isolated_facility_ids.includes(facility.id) ? 'isolated' : 'functioning';
+  }
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const popupRef = useRef<maplibregl.Popup | null>(null);
@@ -83,8 +89,7 @@ export function MapView({ facilityStates }: { facilityStates?: Record<string, Fa
     (map.getSource('roads') as GeoJSONSource).setData(graph);
     (map.getSource('flood') as GeoJSONSource).setData({ type: 'Feature',
       geometry: simulation.flood_polygon_geojson, properties: { provenance: simulation.flood_polygon_geojson.provenance } });
-    map.setFilter('failed-roads', ['any', ['==', ['get', 'status'], 'failed'],
-      ['in', ['get', 'id'], ['literal', simulation.failed_edge_ids]]]);
+    map.setFilter('failed-roads', ['in', ['get', 'id'], ['literal', simulation.failed_edge_ids]]);
   }, [ready, graph, simulation]);
 
   useEffect(() => {
@@ -98,7 +103,7 @@ export function MapView({ facilityStates }: { facilityStates?: Record<string, Fa
     }
     if (!bounds.isEmpty()) {
       const height = map.getContainer().clientHeight;
-      map.fitBounds(bounds, { padding: { top: Math.min(280, height * 0.4),
+      map.fitBounds(bounds, { padding: { top: Math.min(70, height * 0.12),
         bottom: Math.min(180, height * 0.27), left: 44, right: 60 }, duration: 0, maxZoom: 14 });
     }
     const markers = facilities.map(facility => {
@@ -137,20 +142,10 @@ export function MapView({ facilityStates }: { facilityStates?: Record<string, Fa
     if (popupNode && selected) popupRef.current?.setLngLat([selected.lon, selected.lat]);
   }, [popupNode, selected]);
 
-  return <main className="map-view">
+  return <section className="map-view" aria-label="Scenario map">
     <div ref={container} className="map" aria-label="New Delhi infrastructure and simulated Yamuna flood" />
-    <header className="map-heading">
-      <p className="eyebrow">Urban infrastructure · What-if simulator</p>
-      <h1>CASCADE<span>New Delhi</span></h1>
-      <p className="scenario-title"><span className="flood-dot" />Yamuna flood scenario <ProvenanceBadge provenance={simulation.provenance} /></p>
-      <p className="map-note">Illustrative failures, locations and capacities. Not live conditions.</p>
-      <div className="data-status" role="status" aria-live="polite">
-        {loading ? 'Connecting to API… showing bundled samples' : <>
-          {Object.entries(sources).map(([name, source]) => <span key={name}>{name}: <strong>{source === 'api' ? 'API' : 'bundled sample'}</strong></span>)}
-        </>}
-      </div>
-      <p className="source-provenance">Roads <ProvenanceBadge provenance={graph.provenance} /></p>
-    </header>
+    <div className="map-provenance">Roads <ProvenanceBadge provenance={graph.provenance} />
+      Flood <ProvenanceBadge provenance={simulation.flood_polygon_geojson.provenance} /></div>
     <aside className="map-legend" aria-label="Map legend">
       <p className="eyebrow">Map key</p>
       <div className="legend-row"><span className="legend-line" />Road <span className="legend-line failed" />Failed road <span className="legend-flood" />Flood zone</div>
@@ -159,5 +154,5 @@ export function MapView({ facilityStates }: { facilityStates?: Record<string, Fa
     </aside>
     {(mapError || tileError) && <p className="map-error" role="alert">{mapError || 'Basemap tiles unavailable. Scenario overlays remain available.'}</p>}
     {selected && popupNode && createPortal(<FacilityDetails facility={selected} state={visibleStates[selected.id]} />, popupNode)}
-  </main>;
+  </section>;
 }

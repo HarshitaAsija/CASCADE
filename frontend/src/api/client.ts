@@ -1,21 +1,16 @@
-import type { Facility, GraphGeoJSON, SimulationResult } from '../types';
+import type { ComparisonResult, Facility, FloodScenario, GraphGeoJSON, Metrics, SimulationResult } from '../types';
 import graphSample from '../sample/graph.geojson.json';
 import facilitySample from '../sample/facilities.json';
 import simulationSample from '../sample/sample_simulation.json';
+import comparisonSample from '../sample/sample_comparison.json';
 
 export const API_BASE = (import.meta.env.VITE_API_BASE || 'http://localhost:8000').replace(/\/+$/, '');
 
 export interface Loaded<T> {
   data: T;
   source: 'api' | 'sample';
+  error?: string;
 }
-
-// Fixtures are copied verbatim from data/ and checked by the backend contract suite.
-const samples = {
-  graph: graphSample as GraphGeoJSON,
-  facilities: facilitySample as Facility[],
-  simulation: simulationSample as SimulationResult,
-};
 
 const record = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -43,6 +38,13 @@ function validFacilities(value: unknown): value is Facility[] {
     && (item.node_id === null || finite(item.node_id)) && provenance(item.provenance));
 }
 
+function validMetrics(value: unknown): value is Metrics {
+  if (!record(value) || !provenance(value.provenance)) return false;
+  return ['median_response_min', 'p90_response_min'].every(key => value[key] === null || (finite(value[key]) && value[key] >= 0))
+    && ['pop_without_hospital_access', 'facilities_degraded'].every(key => finite(value[key]) && value[key] >= 0)
+    && finite(value.evacuation_capacity_pct) && value.evacuation_capacity_pct >= 0 && value.evacuation_capacity_pct <= 100;
+}
+
 function validSimulation(value: unknown): value is SimulationResult {
   if (!record(value) || !provenance(value.provenance) || !record(value.flood_polygon_geojson)) return false;
   const polygon = value.flood_polygon_geojson;
@@ -50,8 +52,28 @@ function validSimulation(value: unknown): value is SimulationResult {
     && Array.isArray(polygon.coordinates) && polygon.coordinates.length > 0
     && polygon.coordinates.every(ring => Array.isArray(ring) && ring.length >= 4 && ring.every(point))
     && ids(value.failed_edge_ids) && ids(value.failed_facility_ids) && ids(value.isolated_facility_ids)
-    && record(value.metrics) && provenance(value.metrics.provenance) && Array.isArray(value.timeline);
+    && validMetrics(value.metrics) && Array.isArray(value.timeline);
 }
+
+function validComparison(value: unknown): value is ComparisonResult {
+  if (!record(value) || !validSimulation(value.baseline) || !record(value.results)
+    || !Array.isArray(value.interventions) || !provenance(value.provenance)) return false;
+  const results = value.results;
+  return Object.values(results).every(validSimulation) && value.interventions.every(item => record(item)
+    && typeof item.id === 'string' && typeof item.rationale === 'string' && record(item.params)
+    && ['reroute', 'preposition_ambulance', 'open_shelter', 'deploy_generator'].includes(String(item.type))
+    && provenance(item.provenance) && item.id in results);
+}
+
+// Validate the nested comparison rather than casting JSON arrays to coordinate tuples.
+const comparisonFixture: unknown = comparisonSample;
+if (!validComparison(comparisonFixture)) throw new Error('Invalid bundled comparison fixture');
+const samples = {
+  graph: graphSample as GraphGeoJSON,
+  facilities: facilitySample as Facility[],
+  simulation: simulationSample as SimulationResult,
+  comparison: comparisonFixture,
+};
 
 async function request<T>(path: string, fallback: T, valid: (value: unknown) => value is T, signal: AbortSignal, body?: object): Promise<Loaded<T>> {
   const timeout = new AbortController();
@@ -71,7 +93,7 @@ async function request<T>(path: string, fallback: T, valid: (value: unknown) => 
     return { data, source: 'api' };
   } catch (error) {
     if (signal.aborted) throw error;
-    return { data: fallback, source: 'sample' };
+    return { data: fallback, source: 'sample', error: error instanceof Error ? error.message : 'Request failed' };
   } finally {
     clearTimeout(timer);
     signal.removeEventListener('abort', abort);
@@ -86,8 +108,12 @@ export function loadFacilities(signal: AbortSignal): Promise<Loaded<Facility[]>>
   return request('/facilities', samples.facilities, validFacilities, signal);
 }
 
-export function loadSimulation(signal: AbortSignal): Promise<Loaded<SimulationResult>> {
-  return request('/simulate', samples.simulation, validSimulation, signal, { severity: 'high', provenance: 'simulated' });
+export function loadSimulation(signal: AbortSignal, severity: FloodScenario['severity'] = 'high'): Promise<Loaded<SimulationResult>> {
+  return request('/simulate', samples.simulation, validSimulation, signal, { severity, provenance: 'simulated' });
+}
+
+export function loadComparison(signal: AbortSignal): Promise<Loaded<ComparisonResult>> {
+  return request('/compare', samples.comparison, validComparison, signal);
 }
 
 export const initialSamples = samples;

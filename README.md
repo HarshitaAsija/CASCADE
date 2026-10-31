@@ -2,7 +2,7 @@
 
 CASCADE is a what-if simulator for cascading urban infrastructure failure. The hackathon demo focuses on a Yamuna flood in one New Delhi study area. Deterministic Python and NetworkX will calculate impacts; AI agents will explain results and propose interventions.
 
-This scaffold includes a FastAPI health endpoint, simulated Delhi API fixtures, generated TypeScript contracts, and a full-screen MapLibre map centred on New Delhi. No real flood model, verified Delhi datasets, or AI integration is implemented yet.
+This scaffold includes a FastAPI health endpoint, simulated Delhi API fixtures, generated TypeScript contracts, and a MapLibre map with a severity-control sidebar, impact cards, and saved intervention comparisons. No real flood model, verified Delhi datasets, or AI integration is implemented yet.
 
 ## Backend quickstart
 
